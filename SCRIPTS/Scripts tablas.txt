@@ -1,0 +1,76 @@
+USE [PruebaUlises]
+GO
+
+
+CREATE TABLE [dbo].[Roles](
+	[rolid] [int] NULL,
+	[descripcion] [varchar](50) NULL,
+	[estatus] [smallint] NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Usuario](
+	[userid] [int] NULL,
+	[usernom] [varchar](50) NULL,
+	[useremail] [varchar](50) NULL,
+	[userpassword] [varchar](100) NULL,
+	[createdat] [date] NULL,
+	[createdby] [int] NULL,
+	[rol] [int] NULL
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE [dbo].[Productos](
+	[productoid] [int] NULL,
+	[descripcion] [varchar](150) NULL,
+	[precio] [decimal](18, 2) NULL,
+	[estatus] [smallint] NULL,
+	[unidades] [int] NULL
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE [dbo].[DetSalidas](
+	[salidaid] [int] NULL,
+	[renglon] [int] NULL,
+	[producto] [int] NULL,
+	[cantidad] [int] NULL,
+	[precio] [decimal](18, 2) NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EncSalidas](
+	[id] [int] NULL,
+	[usuariocaptura] [int] NULL,
+	[fechacaptura] [date] NULL,
+	[total] [decimal](18, 2) NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[DetEntradas](
+	[entradaid] [int] NULL,
+	[renglon] [int] NULL,
+	[producto] [int] NULL,
+	[cantidad] [int] NULL,
+	[precio] [decimal](18, 2) NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EncEntradas](
+	[id] [int] NULL,
+	[usuariocaptura] [int] NULL,
+	[fechacaptura] [date] NULL,
+	[total] [decimal](18, 2) NULL
+) ON [PRIMARY]
+GO
+
+
+
+
+
+
+
+
