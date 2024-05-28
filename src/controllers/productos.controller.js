@@ -22,7 +22,9 @@ export const insertProduct = async(req, res) =>{
         await pool.request()
                 .input('descripcion', req.body.descripcion)
                 .input('precio', req.body.precio)
+                .input('producto', idProd.recordset[0].folio)
                 .query('Insert into productos values ((Select MAX(productoid) + 1 from productos), @descripcion, @precio, 1, 0)')
+                        
 
         res.json({status: 200, message: 'Registro insertado con éxito'})
     }catch(error){
@@ -33,11 +35,23 @@ export const insertProduct = async(req, res) =>{
 export const updateStock = async(req, res) =>{
     try{
         const  pool = await getConnection();
+        let folio = await pool.request().query('Select COALESCE(MAX(id), 0) + 1 as folio from EncEntradas')
         await pool.request()
                     .input('id', req.body.id)
                     .input('stock', req.body.stock)
                     .query('Update Productos set unidades = unidades + @stock where productoid = @id')
         
+        await pool.request().input('folio', folio.recordset[0].folio)
+                            .input('usuario', req.body.usuario)
+                            .input('stock', req.body.stock)
+                            .query('Insert into EncEntradas values(@folio, @usuario, getDate(), @stock)')
+        
+        await pool.request().input('folio', folio.recordset[0].folio)
+                            .input('id', req.body.id)
+                            .input('stock', req.body.stock)
+                            .input('precio', req.body.precio)
+                            .query('Insert into DetEntradas values(@folio, 1, @id, @stock, @precio)')
+
         res.json({status: 200, message: 'Registro actualizado con éxito'})
     }catch(error){
         res.json({status: 400, message: error.toString()})
