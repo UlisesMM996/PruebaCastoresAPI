@@ -22,7 +22,6 @@ export const insertProduct = async(req, res) =>{
         await pool.request()
                 .input('descripcion', req.body.descripcion)
                 .input('precio', req.body.precio)
-                .input('producto', idProd.recordset[0].folio)
                 .query('Insert into productos values ((Select MAX(productoid) + 1 from productos), @descripcion, @precio, 1, 0)')
                         
 
@@ -123,10 +122,15 @@ export const getSalidas = async(req, res) =>{
         const  pool = await getConnection();
         let result = await pool.request()
                     .query(`
-                    Select ds.salidaid, ds.renglon, p.descripcion, ds.cantidad, ds.precio, us.usernom, es.fechacaptura   from DetSalidas ds
+                    Select ds.salidaid, ds.renglon, p.descripcion, 'Salida' as tipo, ds.cantidad, ds.precio, us.usernom, es.fechacaptura   from DetSalidas ds
                     inner join EncSalidas es on ds.salidaid = es.id
                     inner join Productos p on ds.producto = p.productoid
                     inner join Usuario us on es.usuariocaptura = us.userid
+                    UNION
+                    Select de.entradaid, de.renglon, p.descripcion, 'Entrada' as tipo, de.cantidad, de.precio, us.usernom, ee.fechacaptura   from DetEntradas de
+                    inner join EncEntradas ee on de.entradaid = ee.id
+                    inner join Productos p on de.producto = p.productoid
+                    inner join Usuario us on ee.usuariocaptura = us.userid
                     `)
         if(result.recordset.length){
             res.json({status: 200, message: 'Registro localizado con éxito', data: result.recordset})

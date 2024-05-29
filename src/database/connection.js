@@ -3,7 +3,7 @@ import sql from 'mssql'
 const dbSettings = {
     user: "sa", 
     password: `Monjaraz24*`,
-    server : "ccalzado.com",
+    server : "ingrese su propio server",
     port: 1433,
     database: "PruebaUlises",
     requestTimeout: 130000, 
